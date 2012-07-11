@@ -1,7 +1,8 @@
 class Kiwi < Thor
   include Thor::Actions
   BREW_PACKAGES = %w{gecode}
-  SUB_SUBMODULES = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
+  SUBMODULES_WITH_SUBMODULES = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
+  SUBMODULES_WITH_GEMFILES        = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
   no_tasks do
     def found!(what)
       @@found ||= []
@@ -60,7 +61,11 @@ class Kiwi < Thor
   
   desc "bundler", "runs bundle install"
   def bundler
-    run "bundle install"
+    SUBMODULES_WITH_GEMFILES.each do |dir|
+      inside dir do
+        run "bundle install"
+      end
+    end
   end
   
   desc "init_submodules", "initializes git submodules"
@@ -68,7 +73,7 @@ class Kiwi < Thor
     in_root do
       init_git_submodules(`pwd`)
     end
-    SUB_SUBMODULES.each do |dir|
+    SUBMODULES_WITH_SUBMODULES.each do |dir|
       inside dir do
         init_git_submodules(dir)
       end
@@ -79,7 +84,7 @@ class Kiwi < Thor
   def setup
     invoke 'kiwi:rvm'
     invoke 'kiwi:pkg'
-    invoke 'kiwi:bundler'
     invoke 'kiwi:init_submodules'
+    invoke 'kiwi:bundler'
   end
 end

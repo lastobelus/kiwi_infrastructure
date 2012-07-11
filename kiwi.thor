@@ -30,7 +30,6 @@ class Kiwi < Thor
       say "Loading git submodules for #{dir}"
       
       run "git submodule update --init"
-      run "git submodule foreach git checkout master"
     end
     
   end
@@ -61,6 +60,7 @@ class Kiwi < Thor
   
   desc "bundler", "runs bundle install"
   def bundler
+    run "bundle install"
     SUBMODULES_WITH_GEMFILES.each do |dir|
       inside dir do
         run "bundle install"
@@ -80,11 +80,34 @@ class Kiwi < Thor
     end
   end
   
+  desc "submodules_heads", "puts each git submodule on master & pulls"
+  def submodules_heads
+    in_root do
+      run "git submodule foreach git checkout master"
+      run "git submodule foreach git pull"    
+    end
+    SUBMODULES_WITH_SUBMODULES.each do |dir|
+      inside dir do
+        run "git submodule foreach git checkout master"
+        run "git submodule foreach git pull"    
+      end
+    end
+  end
+
   desc "setup", "Sets up the kiwi deployment platform for development"
   def setup
     invoke 'kiwi:rvm'
     invoke 'kiwi:pkg'
     invoke 'kiwi:init_submodules'
+    invoke 'kiwi:submodules_heads'
+    invoke 'kiwi:bundler'
+  end
+  
+  desc "pull", "pulls kiwi_infrastructure, runs git submodule update, and bundle install"
+  method_options :name => :default
+  def pull
+    run "git pull"
+    run "git submodule update"
     invoke 'kiwi:bundler'
   end
 end

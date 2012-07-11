@@ -1,7 +1,7 @@
 class Kiwi < Thor
   include Thor::Actions
   BREW_PACKAGES = %w{gecode}
-  SUB_SUBMODULES = %w{kiwi-ironfan-homebase ironfan-ci}
+  SUB_SUBMODULES = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
   no_tasks do
     def found!(what)
       @@found ||= []

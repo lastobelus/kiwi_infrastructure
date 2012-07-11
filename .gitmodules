@@ -1,0 +1,9 @@
+[submodule "kiwi-ironfan-homebase"]
+	path = kiwi-ironfan-homebase
+	url = git@github.com:lastobelus/kiwi-ironfan-homebase.git
+[submodule "kiwi-ironfan-ci"]
+	path = kiwi-ironfan-ci
+	url = git@github.com:lastobelus/kiwi-ironfan-ci.git
+[submodule "php_helloworld_app"]
+	path = php_helloworld_app
+	url = git@github.com:lastobelus/php_helloworld_app.git

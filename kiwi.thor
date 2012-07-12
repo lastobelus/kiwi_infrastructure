@@ -58,6 +58,15 @@ class Kiwi < Thor
     end
   end
   
+  
+  desc "rvmrc", "creates a rvmrc with kiwi gemset"
+  method_options :name => :default
+  def rvmrc
+    raise Thor::Error.new("haven't figured out how to make this work yet; please run\nrvm --rvmrc --create 1.9.3@kiwi-ironfan\nmanually in an interactive shell")
+    invoke 'kiwi:rvm'
+    run %Q{bash -l "rvm --rvmrc --create 1.9.3@kiwi-ironfan"}
+  end
+  
   desc "bundler", "runs bundle install"
   def bundler
     run "bundle install"
@@ -113,7 +122,7 @@ class Kiwi < Thor
   
   desc "chef_conf", "links .chef to kiwi-ironfan-homebase"
   def chef_conf
-    raise Thor::Error('kiwi-ironfan-homebase must be installed. Run thor kiwi:setup first') unless File.exist?('kiwi-ironfan-homebase')
+    raise Thor::Error.new('kiwi-ironfan-homebase must be installed. Run thor kiwi:setup first') unless File.exist?('kiwi-ironfan-homebase')
     unless File.exist?('.chef')      
       run "ln -s kiwi-ironfan-homebase/knife .chef"
     else

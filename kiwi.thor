@@ -110,4 +110,15 @@ class Kiwi < Thor
     run "git submodule update"
     invoke 'kiwi:bundler'
   end
+  
+  desc "chef_conf", "links .chef to kiwi-ironfan-homebase"
+  def chef_conf
+    raise Thor::Error('kiwi-ironfan-homebase must be installed. Run thor kiwi:setup first') unless File.exist?('kiwi-ironfan-homebase')
+    unless File.exist?('.chef')      
+      run "ln -s kiwi-ironfan-homebase/knife .chef"
+    else
+      say ".chef already exists!", :red
+    end
+  end
+  
 end

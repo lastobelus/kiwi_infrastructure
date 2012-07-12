@@ -46,7 +46,7 @@ class Kiwi < Thor
   def brew
     unless check_presence('brew')
       say "Installing homebrew for #{user}", :green
-      run " /usr/bin/ruby -e \"$(curl -fsSL https://raw.github.com/gist/323731)\""
+      run " /usr/bin/ruby -e \"$(/usr/bin/curl -fsSL https://raw.github.com/mxcl/homebrew/master/Library/Contributions/install_homebrew.rb)\""
     end
   end
 
@@ -62,7 +62,7 @@ class Kiwi < Thor
   def rvm
     unless check_presence('rvm')
       say "Installing rvm for #{user}", :green
-      run "bash < <(curl -s https://rvm.beginrescueend.com/install/rvm)"
+      run "curl -L https://get.rvm.io | bash -s stable --ruby"
     end
   end
   

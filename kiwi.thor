@@ -9,6 +9,14 @@ class Kiwi < Thor
       @@found << what
     end
 
+    def user
+      @user = %x["whoami"].chomp
+    end
+
+    def user_home
+      Thor::Util.user_home
+    end
+
     def found?(what)
       @@found ||= []
       @@found.include?(what)

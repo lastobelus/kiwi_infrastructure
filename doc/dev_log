@@ -64,3 +64,18 @@ mate data_bags/apps/helloworld.json
 export CHEF_USER=kiwi_test
 
 
+
+
+
+############################################################################
+# setting up cuken
+############################################################################
+# ironfan-ci was proving complicated and confusing to setup, so I decided to first try to do some acceptance tests of my helloworld cluster using cuken directly
+#
+
+############################################################################
+# setting up minitest
+############################################################################
+git co -b minitest
+knife cookbook site install minitest-handler --branch minitest
+knife cookbook upload minitest-handler

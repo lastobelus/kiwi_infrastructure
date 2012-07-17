@@ -1,3 +1,5 @@
+require 'berkshelf/thor'
+
 class Kiwi < Thor
   include Thor::Actions
   BREW_PACKAGES = %w{gecode}
@@ -118,7 +120,19 @@ class Kiwi < Thor
     invoke 'kiwi:init_submodules'
     invoke 'kiwi:submodules_heads'
     invoke 'kiwi:bundler'
+    invoke 'kiwi:berksfile'
   end
+  
+  desc "berksfile", "removes kiwi-ironfan-homebase/cookbooks and does berks install --shims"
+  def berksfile
+    homebase = "kiwi-ironfan-homebase/cookbooks"
+    inside "kiwi-ironfan-homebase" do
+      run "rm -rf cookbooks"
+      berksfile = File.join(Dir.pwd, Berkshelf::DEFAULT_FILENAME)
+      invoke 'berkshelf:install', [], shims: "cookbooks", berksfile: berksfile
+    end
+  end
+  
   
   desc "pull", "pulls kiwi_infrastructure, runs git submodule update, and bundle install"
   method_options :name => :default

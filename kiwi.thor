@@ -90,10 +90,12 @@ class Kiwi < Thor
   desc "init_submodules", "initializes git submodules"
   def init_submodules
     in_root do
+      say " root init_submodules Dir.pwd: #{Dir.pwd.inspect}  run('pwd'): #{run('pwd').inspect}"
       init_git_submodules(`pwd`)
     end
     SUBMODULES_WITH_SUBMODULES.each do |dir|
       inside dir do
+      say " #{dir} init_submodules Dir.pwd: #{Dir.pwd.inspect}  run('pwd'): #{run('pwd').inspect}"
         init_git_submodules(dir)
       end
     end
@@ -102,11 +104,13 @@ class Kiwi < Thor
   desc "submodules_heads", "puts each git submodule on master & pulls"
   def submodules_heads
     in_root do
+      say " root init_submodules Dir.pwd: #{Dir.pwd.inspect}  run('pwd'): #{run('pwd').inspect}"
       run "git submodule foreach git checkout master"
       run "git submodule foreach git pull"    
     end
     SUBMODULES_WITH_SUBMODULES.each do |dir|
       inside dir do
+      say " #{dir} init_submodules Dir.pwd: #{Dir.pwd.inspect}  run('pwd'): #{run('pwd').inspect}"
         run "git submodule foreach git checkout master"
         run "git submodule foreach git pull"    
       end

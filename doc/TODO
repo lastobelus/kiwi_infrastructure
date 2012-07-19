@@ -7,16 +7,3 @@ setup top-level cucumber and do actual cluster tests
 
 
 
-USE BERKSHELF
-- make a new clone
-- make a branch
-- move helloworld to kiwi-pantry
-- add berkfile
-- do an ls and use regex to collect the vendor/pantry symlinks
-		- transform these to cookbook "x", :path => "vendor/ironfan-pantry/cookbooks/x"
-- do an ls to collect the opscode cookbooks. these become just cookbook "x"
-- set the git source of minitest-handler
--	set cookbook "helloworld" => :path => "vendor/kiwi-pantry/cookbooks/helloworld"
-- remove cookbooks dir
-- berks install
-- test 2_box_lamp

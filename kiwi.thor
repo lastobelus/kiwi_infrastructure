@@ -3,8 +3,10 @@ require 'berkshelf/thor'
 class Kiwi < Thor
   include Thor::Actions
   BREW_PACKAGES = %w{gecode}
+  APT_PACKAGES = %w{libgecode-dev}
   SUBMODULES_WITH_SUBMODULES = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
-  SUBMODULES_WITH_GEMFILES        = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
+  SUBMODULES_WITH_GEMFILES = %w{kiwi-ironfan-homebase kiwi-ironfan-ci}
+
   no_tasks do
     def found!(what)
       @@found ||= []
@@ -13,6 +15,10 @@ class Kiwi < Thor
 
     def user
       @user = %x["whoami"].chomp
+    end
+
+    def operating_system
+      @os ||= RbConfig::CONFIG['host_os']
     end
 
     def user_home
@@ -26,24 +32,60 @@ class Kiwi < Thor
 
     def check_presence name
       return true if found?(name)
-      if run("which #{name}", :verbose => false) ||
-          (name != 'brew'&& check_presence('brew') && run('brew list', :capture => true, :verbose => false).include?(name))
-        say "Found #{name}", :green
-        found!(name)
-        true
+
+      present = false
+
+      if run("which #{name}", :verbose => false)
+        present = true
       else
-        false
+
+          case operating_system
+            when "linux-gnu"
+              if check_presence("dpkg")
+                if run("dpkg --listfiles #{name} | grep #{name}", :verbose => false)
+                    say "in here"
+                    present = true
+                    found!(name)
+                end
+              end
+
+            when /^darwin/
+              if (name != 'brew' && check_presence('brew') && run('brew list', :capture => true, :verbose => false).include?(name))
+                present = true
+                found!(name)
+              end
+            else
+
+          end
+      end
+
+      if present
+        say "found #{name}", :green
+        found!(name)
+      end
+
+      present
+    end
+
+    def init_git_submodules(dir)
+      say "in init_git_submodules #{dir}"
+
+      tries = 0;
+      while(tries < 3 && !run("git submodule update --init")) do
+        tries += 1;
+        say "attempt number #{tries} has failed..."
       end
     end
-    
-    def init_git_submodules(dir)
-      say "Loading git submodules for #{dir}"
-      
-      run "git submodule update --init"
-    end
-    
+
   end
-  
+
+    desc 'which', 'performs which'
+    def which
+        check_presence("garbage")
+        check_presence("ruby")
+        check_presence("libgecode-dev")
+    end
+
   desc 'brew', 'Installs homebrew package manager'
   def brew
     unless check_presence('brew')
@@ -54,12 +96,39 @@ class Kiwi < Thor
 
   desc "pkg", "install dependencies. currently only supports brew on os x"
   def pkg
-    invoke "kiwi:brew"
-    BREW_PACKAGES.each do |pkg|
-      run "brew install #{pkg}" unless check_presence(pkg)
+
+    case operating_system
+        when "linux-gnu"
+
+            APT_PACKAGES.each do |pkg|
+                if !check_presence(pkg)
+                    run "sudo apt-get install #{pkg}"
+                else
+                    say "#{pkg} is already installed"
+                end
+            end
+
+        when "darwin"
+            say "iDetected: OS X"
+
+            invoke "kiwi:brew"
+            BREW_PACKAGES.each do |pkg|
+              run "brew install #{pkg}" unless check_presence(pkg)
+            end
+        else
+            say "WARNING: futuristic space operating system detected..."
+            say "  failed to install some packages"
+
+            APT_PACKAGES.each do |pkg|
+                say "  failed to install #{pkg}"
+            end
+
+            BREW_PACKAGES.each do |pkg|
+                say "  failed to install #{pkg}"
+            end
     end
   end
-  
+
   desc "rvm", "Installs RVM"
   def rvm
     unless check_presence('rvm')
@@ -89,11 +158,15 @@ class Kiwi < Thor
   
   desc "init_submodules", "initializes git submodules"
   def init_submodules
+    say "in init_submodules:"
     in_root do
+      say "  in root do"
       init_git_submodules(`pwd`)
     end
     SUBMODULES_WITH_SUBMODULES.each do |dir|
+      say "  in SUBMODULES_WITH_SUBMODULES.each do"
       inside dir do
+        say "    in dir do"
         init_git_submodules(dir)
       end
     end
@@ -115,6 +188,7 @@ class Kiwi < Thor
 
   desc "setup", "Sets up the kiwi deployment platform for development"
   def setup
+    say "in setup"
     invoke 'kiwi:rvm'
     invoke 'kiwi:pkg'
     invoke 'kiwi:init_submodules'

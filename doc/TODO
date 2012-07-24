@@ -7,3 +7,8 @@ setup top-level cucumber and do actual cluster tests
 
 
 
+- load balancing
+	haproxy, stud
+	- devops/loadbalancer
+	http://vincent.bernat.im/en/blog/2011-ssl-benchmark.html
+	

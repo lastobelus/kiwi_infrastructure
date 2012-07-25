@@ -30,10 +30,14 @@ set application & application_php to kiwi branch in Berksfile\
 \pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
 
 \f1 \cf0 \strike0\striked0 \
-cp php.conf.erb to kiwi_app templates
-\f0 \strike \strikec0 \
 
-\f1 \strike0\striked0 cp app.yml to templates\
+\f0 \strike \strikec0 cp php.conf.erb to kiwi_app templates\
+cp app.yml to templates\
 cp db_[env].dsn to templates\
 rename stag environment to staging\
+\
+
+\f1 \strike0\striked0 use php.conf.erb\
+use db.dsn.erb\
+use app.yml\
 }

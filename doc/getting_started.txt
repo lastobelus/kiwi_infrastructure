@@ -1,0 +1,62 @@
+
+setting up SSH for git access
+  check for existing keys
+  ssh-keygen -t dsa
+
+  add the public key to your git repo
+
+  install git if you haven't already
+  sudo apt-get install git-core
+
+  clone the repo
+  git clone git@eable.sourcerepo.com:eable/kiwi_infrastructure.git
+
+  Next pull the repo
+  Before we continue we will need to install RVM
+    you will need
+      sudo apt-get install curl
+    To install RVM follow
+      http://www.christopherirish.com/2010/08/25/how-to-install-rvm-on-ubuntu-10-04/
+    The steps in that blog (it's great!)
+
+  setup your .bashrc file
+    echo '[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"' >> .bashrc
+
+    Install ruby's dependencies
+      apt-get install build-essential openssl libreadline6 libreadline6-dev curl git-core zlib1g zlib1g-dev libssl-dev libyaml-dev libsqlite3-dev sqlite3 libxml2-dev libxslt-dev autoconf libc6-dev ncurses-dev automake libtool bison subversion
+
+  Finally you're ready to install ruby the RVM way!
+    rvm install ruby-1.9.3-p194
+
+    rvm use ruby-1.9.3
+    rvm gemset create kiwi-integration
+
+    make a .rvmrc file 
+    it should specify a gemset for your project
+      rvm ruby-1.9.3-p194@kiwi-integration
+
+    now cd out of the directory and back into it... 
+
+  and install bundler!
+    gem install bundler
+    gem install rake
+
+    you will need to get libgecode-dev the old fashioned way
+      curl http://apt.opscode.com/packages@opscode.com.gpg.key | sudo apt-key add -
+      sudo apt-get update
+      sudo apt-get install libgecode-dev
+
+    and the latest version of libgecode
+      cd /tmp
+      curl -C - -O  http://www.gecode.org/download/gecode-3.5.0.tar.gz
+      tar zxvf gecode-3.5.0.tar.gz
+      cd gecode-3.5.0 && ./configure
+      make && make install
+
+      (otherwise dep_selector will barf at you)
+
+    fetch all the gems you will need for kiwi-infrastructure
+      bundle install
+
+  Run the setup
+    thor kiwi:setup

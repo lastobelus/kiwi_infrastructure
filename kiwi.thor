@@ -195,6 +195,7 @@ class Kiwi < Thor
     invoke 'kiwi:submodules_heads'
     invoke 'kiwi:bundler'
     invoke 'kiwi:berksfile'
+    invoke 'kiwi:chef_conf'
   end
   
   desc "berksfile", "removes kiwi-ironfan-homebase/cookbooks and does berks install --shims"

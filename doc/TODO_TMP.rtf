@@ -1,0 +1,43 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1138\cocoasubrtf470
+{\fonttbl\f0\fswiss\fcharset0 Helvetica;\f1\fnil\fcharset0 Anonymous;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww10440\viewh13980\viewkind0
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+
+\f0\fs24 \cf0 \strike \strikec0 bring up virtual machine\
+check deployment in minimal_kiwi\
+branch application cookbook with same branch name as application_php\
+set application to path in Berksfile\
+add docroot attribute to application cookbook\
+add docroot attribute to application_php:mod_php_apache2 cookbook\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \strikec0 add docroot attribute to application_php:php cookbook\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \strikec0 berks install\
+kicoup application\
+kicoup application_php\
+\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \strikec0 start shef\
+\
+check hitting minimal kiwi\
+add kiwi branch to application\
+merge allow_docroot_to_be_subdir & svn_support branches\
+\pard\tx566\tx1133\tx1700\tx2267\tx2834\tx3401\tx3968\tx4535\tx5102\tx5669\tx6236\tx6803\pardirnatural
+\cf0 \strikec0 add kiwi branch to application_php\
+merge allow_docroot_to_be_subdir & svn_support branches\
+set application & application_php to kiwi branch in Berksfile\
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f1 \cf0 \strike0\striked0 \
+
+\f0 \strike \strikec0 cp php.conf.erb to kiwi_app templates\
+cp app.yml to templates\
+cp db_[env].dsn to templates\
+rename stag environment to staging\
+\
+
+\f1 \strike0\striked0 use php.conf.erb\
+use db.dsn.erb\
+use app.yml\
+}

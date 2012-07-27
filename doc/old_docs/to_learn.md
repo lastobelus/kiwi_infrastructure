@@ -18,8 +18,6 @@ https://github.com/iafonov/simple_cuke
 
 ## Cuken ##
 
-
-
 ## Aruba ##
 CLI Steps for Cucumber
 ### Reporting ###
